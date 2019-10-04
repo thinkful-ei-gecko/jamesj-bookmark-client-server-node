@@ -46,6 +46,7 @@ class EditBookmark extends Component {
           })
         }
         this.props.onEditBookmark(this.props.currentEdit, bookmark)
+        this.props.history.push('/')
       })
       .catch(error => {
         this.setState({ error })

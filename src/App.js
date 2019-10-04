@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
-import AddBookmark from './AddBookmark/AddBookmark';
-import BookmarkList from './BookmarkList/BookmarkList';
-import EditBookmark from './EditBookmark/EditBookmark';
-import Nav from './Nav/Nav';
-import config from './config';
-import './App.css';
+import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
+import AddBookmark from './AddBookmark/AddBookmark'
+import BookmarkList from './BookmarkList/BookmarkList'
+import EditBookmark from './EditBookmark/EditBookmark'
+import Nav from './Nav/Nav'
+import config from './config'
+import './App.css'
 
 const bookmarks = [
   // {
@@ -28,17 +29,17 @@ const bookmarks = [
   //   rating: '4',
   //   desc: 'brings together the world\'s largest community of developers.'
   // }
-];
+]
 
 class App extends Component {
   state = {
     page: 'list',
     bookmarks,
     error: null,
-    currentEdit: null
-  };
+    currentEdit: null,
+  }
 
-  changePage = (page) => {
+  changePage = page => {
     this.setState({ page })
   }
 
@@ -52,25 +53,24 @@ class App extends Component {
 
   addBookmark = bookmark => {
     this.setState({
-      bookmarks: [ ...this.state.bookmarks, bookmark ],
+      bookmarks: [...this.state.bookmarks, bookmark],
     })
   }
 
   editBookmark = (id, data) => {
-    const filteredBookmarks = this.state.bookmarks.filter(b => b.id !== id);
-    const bookmarkToUpdate = this.state.bookmarks.find(b => b.id === id);
-    const updatedBookmark = { ...bookmarkToUpdate, ...data };
+    const filteredBookmarks = this.state.bookmarks.filter(b => b.id !== id)
+    const bookmarkToUpdate = this.state.bookmarks.find(b => b.id === id)
+    const updatedBookmark = { ...bookmarkToUpdate, ...data }
 
     this.setState({
-      bookmarks: [ ...filteredBookmarks, updatedBookmark ],
-      page: 'list'
+      bookmarks: [...filteredBookmarks, updatedBookmark],
+      page: 'list',
     })
   }
 
-  handleEditClick = (id) => {
+  handleEditClick = id => {
     this.setState({
       currentEdit: id,
-      page: 'edit'
     })
   }
 
@@ -79,8 +79,8 @@ class App extends Component {
       method: 'GET',
       headers: {
         'content-type': 'application/json',
-        'Authorization': `Bearer ${config.API_KEY}`
-      }
+        Authorization: `Bearer ${config.API_KEY}`,
+      },
     })
       .then(res => {
         if (!res.ok) {
@@ -93,35 +93,39 @@ class App extends Component {
   }
 
   render() {
-    const { page, bookmarks } = this.state
+    const { bookmarks } = this.state
     return (
-      <main className='App'>
+      <main className="App">
         <h1>Bookmarks!</h1>
-        <Nav clickPage={this.changePage} />
-        <div className='content' aria-live='polite'>
-          {page === 'add' && (
-            <AddBookmark
-              onAddBookmark={this.addBookmark}
-              onClickCancel={() => this.changePage('list')}
-            />
-          )}
-          {page === 'list' && (
+        <Nav />
+        <Route
+          exact path="/"
+          render={routerProps => (
             <BookmarkList
+              {...routerProps}
               bookmarks={bookmarks}
               handleEditClicked={this.handleEditClick}
             />
           )}
-          {page === 'edit' && (
+        />
+        <div className="content" aria-live="polite">
+          <Route path='/add-bookmark' render={(routerProps) => (
+            <AddBookmark
+            {...routerProps}
+            onAddBookmark={this.addBookmark}
+          />
+          )} />
+          <Route path='/edit-bookmark' render={(routerProps) => (
             <EditBookmark
-              onEditBookmark={this.editBookmark}
-              onClickCancel={() => this.changePage('list')}
-              currentEdit={this.state.currentEdit}
-            />
-          )}
+            {...routerProps}
+            onEditBookmark={this.editBookmark}
+            currentEdit={this.state.currentEdit}
+          />
+          )}/>
         </div>
       </main>
-    );
+    )
   }
 }
 
-export default App;
+export default App
