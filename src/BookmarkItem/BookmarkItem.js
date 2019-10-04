@@ -20,6 +20,9 @@ export default function BookmarkItem(props) {
         {props.description}
       </p>
       <div className='BookmarkItem__buttons'>
+        <button onClick={() => props.handleEditClicked(props.id)}>
+          Edit
+        </button>
         <button
           className='BookmarkItem__description'
           onClick={() => props.onClickDelete(props.id)}

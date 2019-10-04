@@ -8,7 +8,7 @@ class BookmarkList extends Component {
   };
 
   render() {
-    const { bookmarks } = this.props
+    const { bookmarks, handleEditClicked } = this.props
     return (
       <section className='BookmarkList'>
         <h2>Your bookmarks</h2>
@@ -16,6 +16,7 @@ class BookmarkList extends Component {
           {bookmarks.map(bookmark =>
             <BookmarkItem
               key={bookmark.id}
+              handleEditClicked={handleEditClicked}
               {...bookmark}
             />
           )}
