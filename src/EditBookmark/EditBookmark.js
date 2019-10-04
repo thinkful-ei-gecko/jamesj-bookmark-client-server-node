@@ -65,7 +65,6 @@ class EditBookmark extends Component {
   }
   render() {
     const { error } = this.state
-    const { onClickCancel } = this.props
     return (
       <section className='EditBookmark'>
         <h2>Edit bookmark</h2>
@@ -133,7 +132,7 @@ class EditBookmark extends Component {
             />
           </div>
           <div className='EditBookmark__buttons'>
-            <button type='button' onClick={onClickCancel}>
+            <button type='button' onClick={() => this.props.history.push('/')}>
               Cancel
             </button>
             {' '}
